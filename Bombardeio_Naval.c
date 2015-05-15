@@ -133,7 +133,6 @@ void coordenadas_tiro (int* x, int* y, int m, int n){
 
 char identifica_alvo_atingido (char filename[], char** M, int x, int y){
     char alvo;
-
     printf("Tiro atingiu coordenadas (%d, %d) ", x, y);
     alvo = M[x - 1][y - 1];
     
@@ -183,43 +182,6 @@ char identifica_alvo_atingido (char filename[], char** M, int x, int y){
     }
 }
 
-
-/*
-    if (alvo == 'S'){
-        M[x - 1][y - 1] = 'x';
-        printf("acertando um submarino\n");
-    }
-    else if (alvo == 'D'){
-        M[x - 1][y - 1] = 'x';
-        printf("acertando um destroyer\n");
-    }
-    else if (alvo == 'C'){
-        M[x - 1][y - 1] = 'x';
-        printf("acertando um cruzador\n");
-    }
-    else if (alvo == 'P'){
-        M[x - 1][y - 1] = 'x';
-        printf("acertando um porta-aviao\n");
-    }
-    else if (alvo == 'H'){
-        M[x - 1][y - 1] = 'x';
-        printf("acertando um hidro-aviao\n");
-    }
-    else if (alvo == '.'){
-        M[x - 1][y - 1] = '=';
-        printf("acertando a agua\n");
-    }
-    else if (alvo == 'T'){
-        M[x - 1][y - 1] = '+';
-        printf("acertando um local onde o barco esteve\n");
-    }
-    else if (alvo == 'B'){
-        M[x - 1][y - 1] = '!';
-        printf("acertando o barco\n");
-    }
-    else printf("\n");
-}
-*/
 
 void dispara_tiros(char filename[],char** M, int m, int n){
     int x, y, cont;
