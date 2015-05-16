@@ -1,20 +1,37 @@
-#Para escrever comentários ##
-############################# Makefile ##########################
-all: teste
+#/*******************************************************************************
+#*	Membros do Grupo:
+#*	 Nome: Duilio Henrique Haroldo Elias                                        *
+#*	 Numero USP: 6799722                                                        *
+#*	 
+#*	 Nome: Maurício Ozaki                                                       *
+#*	 Numero USP:                                                                *
+#*	 
+#*	 Nome:Ricardo Oliveira                                                      *
+#*	 Numero USP:                                                                *
+#*	 
+#*	Professor: Alair             					                           *
+#*	Matéria: Laboratório de Programação I                                      *
+#*
+#*											    			                   *
+#*******************************************************************************/
 
-teste: teste.o main.o 
-	gcc -o teste teste.o main.o
+
+############################# Makefile ##########################
+all: funcoes
+
+funcoes: funcoes.o main.o 
+	gcc -o funcoes funcoes.o main.o
 # O compilador faz a ligação entre os dois objetos
  
 #-----> Distancia com o botão TAB ### e não com espaços
-teste.o: teste.c
-	gcc -o teste.o -c teste.c -W -Wall -ansi -pedantic
+funcoes.o: funcoes.c
+	gcc -o funcoes.o -c funcoes.c -W -Wall -ansi -pedantic
 
-main.o: main.c teste.h
+main.o: main.c funcoes.h
 	gcc -o main.o -c main.c -W -Wall -ansi -pedantic
 
 clean:
 	rm -rf *.o
 
 mrproper: clean
-	rm -rf teste
+	rm -rf funcoes

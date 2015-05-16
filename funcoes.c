@@ -1,3 +1,28 @@
+/*******************************************************************************
+*	Membros do Grupo:
+*	 Nome: Duilio Henrique Haroldo Elias                                        *
+*	 Numero USP: 6799722                                                        *
+*	 
+*	 Nome: Maurício Ozaki                                                       *
+*	 Numero USP:                                                                *
+*	 
+*	 Nome:Ricardo Oliveira                                                      *
+*	 Numero USP:                                                                *
+*	 
+*	Professor: Alair             					                           *
+*	Matéria: Laboratório de Programação I                                      *
+*
+*											    			                   *
+*******************************************************************************/
+/*Funções que estão faltando:
+    - rema_barco
+    - afunda_embarcação
+        -afunda_destroyer
+        -afunda_cruzador
+        -afunda_porta_aviao
+        -afunda_hidro_aviao
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -38,14 +63,15 @@ void save_file (char* filename){
 
 /*alocar memoria para matriz*/
 char** AlocaMatriz(int m, int n){
-  int i;
-  char *    *M;
- M = (char**) malloc(m * sizeof (char*)); /*aloca vetor de apontadores*/
- if (M == NULL)
-    exit(1); /*se houver falta de memoria*/
- for (i = 0; i < m; i++){
-    M[i] = (char*) malloc(n * sizeof (char)); /*aloca as linhas da matriz*/
-    if (M[i] == NULL)
+	int i;
+	char *    *M;
+	M = (char**) malloc(m * sizeof (char*)); /*aloca vetor de apontadores*/
+	if (M == NULL)
+    	exit(1); /*se houver falta de memoria*/
+	for (i = 0; i < m; i++){
+		M[i] = (char*) malloc(n * sizeof (char)); /*aloca as linhas da matriz*/
+
+	if (M[i] == NULL)
         exit(1);
     }
  return M; /*retorna o apontador da matriz alocada*/
@@ -99,13 +125,18 @@ char** leia_mapa(int *m, int *n){
     }
     /*ler o cabecalho do arquivo*/
     fscanf (arq, "%d %d\n", m, n); /*guardar m e n*/
-    M = AlocaMatriz (*m, *n);
-    printf ("Arquivo %s sendo carregado...\n", filename);
+    
+	M = AlocaMatriz (*m, *n);
+    
+	printf ("Arquivo %s sendo carregado...\n", filename);
     LeDados (arq, M, *m, *n); /*transferir para a matriz os dados do arquivo*/
-    printf ("Arquivo %s carregado com sucesso.\n", filename);
+    
+	printf ("Arquivo %s carregado com sucesso.\n", filename);
     fclose(arq); /*fechar o arquivo*/
-    return M;
+    
+	return M;
 }
+
 /*gravar arquivo*/
 void escreva_mapa_arquivo(char filename[], char** M, int m, int n){
     FILE *arq;
@@ -193,8 +224,6 @@ void dispara_tiros(char filename[],char** M, int m, int n){
         atualiza_mapa(filename, M, m, n);
     }
 }
-
-
 
 void posiciona_barco (char filename[], char** M, int* xBarco, int* yBarco, int m, int n){
     int x;
