@@ -1,3 +1,21 @@
+/*******************************************************************************
+*	Membros do Grupo:
+*	 Nome: Duilio Henrique Haroldo Elias                                        *
+*	 Numero USP: 6799722                                                        *
+*	 
+*	 Nome: Maurício Ozaki                                                       *
+*	 Numero USP:7577427                                                        *
+*	 
+*	 Nome:Ricardo Oliveira                                                      *
+*	 Numero USP: 3683165                                                           *
+*	 
+*	Professor: Alair             					                           *
+*	Matéria: Laboratório de Programação I                                      *
+*
+*											    			                   *
+*******************************************************************************/
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -89,7 +107,7 @@ char** leia_mapa(int *m, int *n){
             printf ("Arquivo %s nao encontrado\nDigite novamente o nome do arquivo: ", filename);
     }
     /*ler o cabecalho do arquivo*/
-    fscanf (arq, "%d %d\n", m, n); /*guardar m e n*/
+    fscanf (arq, "%d %d", m, n); /*guardar m e n*/
     M = AlocaMatriz (*m, *n);
     printf ("Arquivo %s sendo carregado...\n", filename);
     LeDados (arq, M, *m, *n); /*transferir para a matriz os dados do arquivo*/
@@ -153,32 +171,32 @@ void coordenadas_tiro (int* x, int* y, int m, int n){
 
 char identifica_alvo_atingido (char** M, int x, int y){
     char alvo;
-    printf("Tiro atingiu coordenadas (%d, %d) ", x, y);
+    printf("Tiro atingiu a linha %d coluna %d ", x, y);
     alvo = M[x - 1][y - 1];
     
     switch (alvo){
         case 'S' :
-            M[x - 1][y - 1] = 'x';
+            /*M[x - 1][y - 1] = 'x';*/
             printf("acertando um submarino\n\n");
             break;
         
         case 'D' :
-            M[x - 1][y - 1] = 'x';
+            /*M[x - 1][y - 1] = 'x';*/
             printf("acertando um destroyer\n\n");
                 break;
 
         case 'C' :
-            M[x - 1][y - 1] = 'x';
+            /*M[x - 1][y - 1] = 'x';*/
             printf("acertando um cruzador\n\n");
             break;
         
         case 'P' :
-            M[x - 1][y - 1] = 'x';
+            /*M[x - 1][y - 1] = 'x';*/
             printf("acertando um porta-aviao\n\n");
             break;
         
         case 'H' :
-            M[x - 1][y - 1] = 'x';
+            /*M[x - 1][y - 1] = 'x';*/
             printf("acertando um hidro-aviao\n\n");
             break;
         
@@ -193,7 +211,7 @@ char identifica_alvo_atingido (char** M, int x, int y){
             break;
 
         case 'B' :
-            M[x - 1][y - 1] = '!';
+            /*M[x - 1][y - 1] = '!';*/
             printf("acertando o barco\n");
             break;
         
@@ -203,28 +221,52 @@ char identifica_alvo_atingido (char** M, int x, int y){
     return alvo;
 }
 
+void afundador (char filename[], char** M, int m, int n, int x, int y, char alvo){
+    int i, j;
+    M[x-1][y-1]='*';
+    for(i=-1;i<=1;i++){
+        for(j=-1;j<=1;j++){
+            if(x+i>0 && x+i<=m && y+j>0 && y + j <= n){
+                if(M[(x-1)+i][(y-1)+j] == alvo){
+                    afundador (filename,M,m,n,x+i,y+j,alvo);
+                }
+                else{
+                    return;
+                }
+            }
+            else{
+             return;
+            }
+        }
+    }
+}
+
+
 void afunda_barco (char filename[], char** M, int m, int n, int x, int y, char alvo){
+    M[x-1][y-1] = '!';
 }
 
 void destroi_submarino (char filename[], char** M, int m, int n, int x, int y, char alvo){
+    M[x-1][y-1] = '*';
+}
+void afunda_destroyer (char filename[], char** M, int m, int n, int x, int y, char alvo){
+    printf("###atigiu um destryer###\n");
+    afundador (filename,M, m, n, x, y, alvo);
 }
 
-void afunda_destroyer (char filename[], char** M, int m, int n, int x, int y, char alvo){
-}
+
 void afunda_cruzador (char filename[], char** M, int m, int n, int x, int y, char alvo){
+    afundador (filename,M, m, n, x, y, alvo);
+    printf("###atigiu um cruzador###\n");
 }
 void afunda_porta_aviao (char filename[], char** M, int m, int n, int x, int y, char alvo){
+    printf("###atigiu um portaAviao###\n");
+    afundador (filename,M, m, n, x, y, alvo);
 }
 
 void afunda_hidro_aviao (char filename[], char** M, int m, int n, int x, int y, char alvo){
-        if (y < (m - 1) && M[x][y + 1] == alvo){
-        }
-        else if (x < (n - 1) && M[x + 1][y] == alvo){
-        }
-        else if (y > 0 && M[x][y - 1] == alvo){
-        }
-        else if (x > 0 && M[x - 1][y] == alvo){
-        }
+        printf("###HidroAviao###\n");
+        afundador (filename,M, m, n, x, y, alvo);
 }
 
 void afunda_embarcacao (char filename[], char** M, int m, int n, int x, int y, char alvo){
@@ -259,7 +301,6 @@ int dispara_tiros(char filename[],char** M, int m, int n){
     for (cont = 0; cont < 3; cont++){
         coordenadas_tiro(&x, &y, m, n);
         alvo = identifica_alvo_atingido (M, x, y);
-        atualiza_mapa(filename, M, m, n);
         afunda_embarcacao (filename,M, m, n, x, y, alvo);
         atualiza_mapa(filename, M, m, n);
         if (alvo == 'B'){
