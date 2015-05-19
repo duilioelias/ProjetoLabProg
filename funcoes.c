@@ -1,49 +1,11 @@
-/*******************************************************************************
-*	Membros do Grupo:
-*	 Nome: Duilio Henrique Haroldo Elias                                        *
-*	 Numero USP: 6799722                                                        *
-*	 
-*	 Nome: Maurício Ozaki                                                       *
-*	 Numero USP:                                                                *
-*	 
-*	 Nome:Ricardo Oliveira                                                      *
-*	 Numero USP:                                                                *
-*	 
-*	Professor: Alair             					                           *
-*	Matéria: Laboratório de Programação I                                      *
-*
-*											    			                   *
-*******************************************************************************/
-/*Funções que estão faltando:
-    - rema_barco
-    - afunda_embarcação
-        -afunda_destroyer
-        -afunda_cruzador
-        -afunda_porta_aviao
-        -afunda_hidro_aviao
-*/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
-/*imprime dados na tela*/
-void escreva_mapa_tela(char** M, int m, int n){
-    int i, j;
-    for (i = 0; i < m; i ++){
-        for (j = 0; j < n; j ++)
-            printf ("%c", M[i][j]);
-        printf ("|%d\n", (i + 1)); /*imprime coord y*/
-        }
-    for (j = 0; j < n; j ++){ /*imprime regua - coord x*/
-        if ((j + 1) % 5 == 0)
-            printf("*");
-        else printf("|");
-    }
-    printf ("\n\n");
-}
+
 
 void save_file (char* filename){
+    FILE *arq;
     int i = 0, j = 0;
     char ext[] = ".txt";
 
@@ -59,19 +21,22 @@ void save_file (char* filename){
         i++;
     }while (ext[j - 1] != '\0');
 
+    arq = fopen (filename , "w"); /*zerar arquivo*/
+    fprintf (arq, "");
+    fclose(arq);
+
 }
 
 /*alocar memoria para matriz*/
 char** AlocaMatriz(int m, int n){
-	int i;
-	char *    *M;
-	M = (char**) malloc(m * sizeof (char*)); /*aloca vetor de apontadores*/
-	if (M == NULL)
-    	exit(1); /*se houver falta de memoria*/
-	for (i = 0; i < m; i++){
-		M[i] = (char*) malloc(n * sizeof (char)); /*aloca as linhas da matriz*/
-
-	if (M[i] == NULL)
+  int i;
+  char **M;
+ M = (char**) malloc(m * sizeof (char*)); /*aloca vetor de apontadores*/
+ if (M == NULL)
+    exit(1); /*se houver falta de memoria*/
+ for (i = 0; i < m; i++){
+    M[i] = (char*) malloc(n * sizeof (char)); /*aloca as linhas da matriz*/
+    if (M[i] == NULL)
         exit(1);
     }
  return M; /*retorna o apontador da matriz alocada*/
@@ -125,25 +90,49 @@ char** leia_mapa(int *m, int *n){
     }
     /*ler o cabecalho do arquivo*/
     fscanf (arq, "%d %d\n", m, n); /*guardar m e n*/
-    
-	M = AlocaMatriz (*m, *n);
-    
-	printf ("Arquivo %s sendo carregado...\n", filename);
+    M = AlocaMatriz (*m, *n);
+    printf ("Arquivo %s sendo carregado...\n", filename);
     LeDados (arq, M, *m, *n); /*transferir para a matriz os dados do arquivo*/
-    
-	printf ("Arquivo %s carregado com sucesso.\n", filename);
+    printf ("Arquivo %s carregado com sucesso.\n", filename);
     fclose(arq); /*fechar o arquivo*/
-    
-	return M;
+    return M;
 }
-
-/*gravar arquivo*/
+/*escrever dados no arquivo*/
 void escreva_mapa_arquivo(char filename[], char** M, int m, int n){
     FILE *arq;
-    arq = fopen (filename , "w"); /*abrir modo gravacao*/
-    fprintf (arq, "%d %d\n", n, m); /*gravar o cabecalho*/
+    arq = fopen (filename , "a"); /*abrir modo gravacao*/
+    fprintf (arq, "%d %d |\n", m, n); /*gravar o cabecalho*/
     GravaDados(arq, M, m, n);
     fclose(arq);
+}
+/*imprime dados na tela*/
+void escreva_mapa_tela(char** M, int m, int n){
+    int i, j;
+
+    printf("   |");
+    for (j = 1; j <= n; j ++) /*imprime num colunas*/
+        printf("%2d ", j);
+    printf(" |\n___|");
+    for (j = 1; j <= n; j ++) /*imprime borda*/
+        printf("___");
+    printf("_|\n");
+
+    for (i = 0; i < m; i ++){
+        printf ("%2d |", (i + 1));  /*imprime num linhas*/
+        for (j = 0; j < n; j ++)
+            if (M[i][j] == '.' || M[i][j] == 'S' || M[i][j] == 'D' ||
+                        M[i][j] == 'C' || M[i][j] == 'P' || M[i][j] == 'H'){
+                printf (" - ");
+            }
+            else
+                printf (" %c ", M[i][j]);
+        printf(" |\n");
+        }
+    printf ("___|");
+    for (j = 1; j <= n; j ++) /*imprime borda*/
+        printf("___");
+    printf("_|\n\n\n\n\n\n\n\n\n\n\n\n");
+
 }
 
 void atualiza_mapa (char filename[], char** M, int m, int n){
@@ -158,11 +147,11 @@ void coordenadas_tiro (int* x, int* y, int m, int n){
     int num_rand;
 
     num_rand = sorteia (m * n) - 1;
-    *y = num_rand % n + 1;
     *x = num_rand / n + 1;
+    *y = num_rand % n + 1;
 }
 
-char identifica_alvo_atingido (char filename[], char** M, int x, int y){
+char identifica_alvo_atingido (char** M, int x, int y){
     char alvo;
     printf("Tiro atingiu coordenadas (%d, %d) ", x, y);
     alvo = M[x - 1][y - 1];
@@ -170,37 +159,37 @@ char identifica_alvo_atingido (char filename[], char** M, int x, int y){
     switch (alvo){
         case 'S' :
             M[x - 1][y - 1] = 'x';
-            printf("acertando um submarino\n");
+            printf("acertando um submarino\n\n");
             break;
         
         case 'D' :
             M[x - 1][y - 1] = 'x';
-            printf("acertando um destroyer\n");
+            printf("acertando um destroyer\n\n");
                 break;
 
         case 'C' :
             M[x - 1][y - 1] = 'x';
-            printf("acertando um cruzador\n");
+            printf("acertando um cruzador\n\n");
             break;
         
         case 'P' :
             M[x - 1][y - 1] = 'x';
-            printf("acertando um porta-aviao\n");
+            printf("acertando um porta-aviao\n\n");
             break;
         
         case 'H' :
             M[x - 1][y - 1] = 'x';
-            printf("acertando um hidro-aviao\n");
+            printf("acertando um hidro-aviao\n\n");
             break;
         
         case '.' :
             M[x - 1][y - 1] = '=';
-            printf("acertando a agua\n");
+            printf("acertando a agua\n\n");
             break;
         
         case 'T' :
             M[x - 1][y - 1] = '+';
-            printf("acertando um local onde o barco esteve\n");
+            printf("acertando um local onde o barco esteve\n\n");
             break;
 
         case 'B' :
@@ -209,37 +198,173 @@ char identifica_alvo_atingido (char filename[], char** M, int x, int y){
             break;
         
         default:
-            printf("\n");
+            printf("atingindo regiao ja atingida\n\n");
     }
+    return alvo;
 }
 
+/*
+void afunda_destroyer (char filename[], char** M, int m, int n, int x, int y, char alvo){
+}
+void afunda_cruzador (char filename[], char** M, int m, int n, int x, int y, char alvo){
+}
+void afunda_porta_aviao (char filename[], char** M, int m, int n, int x, int y, char alvo){
+}
+*/
+void afunda_hidro_aviao (char** M, int m, int n, int x, int y, char alvo){
+        if (y < (m - 1) && M[x][y + 1] == alvo){}
+        else if (x < (n - 1) && M[x + 1][y] == alvo){}
 
-void dispara_tiros(char filename[],char** M, int m, int n){
-    int x, y, cont;
+        else if (y > 0 && M[x][y - 1] == alvo){}
+
+        else if (x > 0 && M[x - 1][y] == alvo){}
+}
+void afunda_embarcacao (char filename[], char** M, int m, int n, int x, int y, char alvo){
+    if (alvo == 'H')
+        afunda_hidro_aviao (M, m, n, x, y, alvo);
+    else{
+        if (y < (n - 1) && M[x][y + 1] == alvo){}
+
+        else if (x < (m - 1) && y < (n - 1) && M[x + 1][y + 1] == alvo){}
+
+        else if (x < (m - 1) && M[x + 1][y] == alvo){}
+
+        else if (x < (m - 1) && y > 0 && M[x + 1][y - 1] == alvo){}
+
+        else if (y > 0 && M[x][y - 1] == alvo){}
+
+        else if (x > 0 && M[x - 1][y] == alvo){}
+
+        else if (x > 0 && y < (n - 1) && M[x - 1][y + 1] == alvo){}
+
+    }
+}
+int dispara_tiros(char filename[],char** M, int m, int n){
+    int x, y, cont, time;
     char alvo;
 
     for (cont = 0; cont < 3; cont++){
         coordenadas_tiro(&x, &y, m, n);
-        alvo = identifica_alvo_atingido (filename, M, x, y);
+        alvo = identifica_alvo_atingido (M, x, y);
         atualiza_mapa(filename, M, m, n);
+        afunda_embarcacao (filename, M, m, n, x, y, alvo);
+        atualiza_mapa(filename, M, m, n);
+        if (alvo == 'B'){
+            printf("O barco afundou\n\n");
+            return 0;
+        }
+        for (time = 0; time < 200000000; time++){} /*intervalo de tempo entre os tiros*/
     }
+    return 1;
 }
 
 void posiciona_barco (char filename[], char** M, int* xBarco, int* yBarco, int m, int n){
-    int x;
-    do{
-        printf("Escolha uma posicao incial (1 a %d) para o barco: ", n);
-        scanf("%d", &x);
-        if (x < 0 || x > n)
-            printf("posicao nao permitida\n");
-        else if (M[0][x - 1] != '.')
-            printf("Esta posicao esta ocupada. Escolha outra posicao\n");
-        else {
-            M[0][x - 1] = 'B';
+    int y;
+    char digito;
+     fflush(stdin); /*para windows*/
+    /*_fpurge(stind) para linux*/
 
+    while (1){
+        y = 0;
+        digito = '0';
+        printf("\nEscolha uma posicao incial (1 a %d) para o barco: ", n);
+        while (digito != '\n'){
+            if (digito < '0' || digito > '9'){
+                while (getc(stdin)!= '\n'){}
+                digito = '0';
+                printf("\nEste nao eh um valor valido para posicao. Digite novamente: ");
+            }
+            y = y * 10 + (digito - 48);
+            digito = getc (stdin);
+        }
+        if (y < 0 || y > n)
+            printf("%d nao eh uma posicao permitida\n\n", y);
+        else if (M[0][y - 1] != '.')
+            printf("Esta posicao esta ocupada. Escolha outra posicao\n\n");
+        else {
+            M[0][y - 1] = 'B';
+            *xBarco = 1;
+            *yBarco = y;
             break;
         }
-    } while (1);
-
+    }
     atualiza_mapa(filename, M, m, n);
+}
+
+char mov_valido (){
+    char mov;
+    while(1){
+      mov = getchar();
+        if (mov >= 'B' && mov <= 'E') /*deixar minuscula*/
+            mov = mov + 32;
+        if (mov >= 'b' && mov <= 'e')
+            return mov;
+        printf("\nDigite um movimento valido (b), (c), (d) ou (e): ");
+    }
+}
+int rema_barco (char filename[], char** M, int* xBarco, int* yBarco, int m, int n){
+    char mov;
+    int tentativa = 3, xNew, yNew ; /*para testar nova posicao*/
+
+    while (1){
+        mov = mov_valido(); /*recebe movimento valido*/
+        xNew = *xBarco;
+        yNew = *yBarco;
+
+        if (mov == 'c')
+            xNew--;
+        else if (mov == 'b')
+            xNew++;
+        else if (mov == 'e')
+            yNew--;
+        else if (mov == 'd')
+            yNew++;
+
+
+        if ((xNew == 0) || (yNew == 0) || (yNew == (n + 1))){
+            printf("O barco atingiu a margem\n\n");
+            atualiza_mapa(filename, M, m, n);
+
+                tentativa--;
+                if (tentativa == 0){
+                    printf("Voce esgotou suas tentativas\n\n");
+                    atualiza_mapa(filename, M, m, n);
+                    return 0;
+                }
+            printf("Voce tem mais %d tentativas\n\n",  tentativa);
+            atualiza_mapa(filename, M, m, n);
+            continue;
+        }
+
+        /*esta bloqueada a passagem*/
+        else if (M[xNew - 1][yNew - 1] == 'S' || M[xNew - 1][yNew - 1] == 'D' || M[xNew - 1][yNew - 1] == 'C' ||
+                                M[xNew - 1][yNew - 1] == 'P' || M[xNew - 1][yNew - 1] == 'H') {
+            tentativa--;
+            if (tentativa == 0){
+                printf("Voce esgotou suas tentativas\n\n");
+                atualiza_mapa(filename, M, m, n);
+                return 0;
+            }
+            printf("O barco atingiu uma embarcacao. Voce tem mais %d tentativas\n\n",  tentativa);
+            atualiza_mapa(filename, M, m, n);
+            continue;
+        }
+        else if (xNew == m){
+            printf("Parabens, voce chegou ao destino\n\n");
+            M[*xBarco - 1][*yBarco - 1] = 'T';
+            *xBarco = xNew;
+            *yBarco = yNew;
+            M[*xBarco - 1][*yBarco - 1] = 'B';
+            atualiza_mapa(filename, M, m, n);
+            return 0;
+        }
+
+        else break;
+    }
+    M[*xBarco - 1][*yBarco - 1] = 'T';
+    *xBarco = xNew;
+    *yBarco = yNew;
+    M[*xBarco - 1][*yBarco - 1] = 'B';
+    atualiza_mapa(filename, M, m, n);
+    return 1;
 }

@@ -22,27 +22,27 @@
 
 
 int main(){
-    char** mapa;
+  char** mapa;
     char save[20];
-    int m, n, xbarco, ybarco, a = 0;
+    int m, n, xBarco, yBarco;
     srand((unsigned int)time(NULL));
 
     save_file(save);
     mapa = leia_mapa(&m, &n);
-    posiciona_barco(save, mapa, &xbarco, &ybarco, m, n);
-    printf("Inicio do jogo \n");
     escreva_mapa_tela(mapa, m, n);
+    posiciona_barco(save, mapa, &xBarco, &yBarco, m, n);
 
-    /* O Jogo termina quando o barco:
-       - fica na mesma possição por três jogadas consecutivas
-       - O barco é atinngido
-       - Se atinge o objetivo chegar na ultima linha da matriz
-    */
-    
-    while (a < 2){
-            dispara_tiros(save, mapa, m, n);
-            a++;
+
+    while (1){
+            if (!dispara_tiros(save, mapa, m, n)){
+                printf("Fim do jogo\n");
+                break;
+            }
+            if (!rema_barco (save, mapa, &xBarco, &yBarco, m, n)){
+                printf("Fim do jogo\n");
+                break;
+            }
     }
     LiberaMatriz(mapa, m);
-    return 0;
+return 0;
 }
