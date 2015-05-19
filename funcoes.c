@@ -203,40 +203,53 @@ char identifica_alvo_atingido (char** M, int x, int y){
     return alvo;
 }
 
-/*
+void afunda_barco (char filename[], char** M, int m, int n, int x, int y, char alvo){
+}
+
+void destroi_submarino (char filename[], char** M, int m, int n, int x, int y, char alvo){
+}
+
 void afunda_destroyer (char filename[], char** M, int m, int n, int x, int y, char alvo){
 }
 void afunda_cruzador (char filename[], char** M, int m, int n, int x, int y, char alvo){
 }
 void afunda_porta_aviao (char filename[], char** M, int m, int n, int x, int y, char alvo){
 }
-*/
-void afunda_hidro_aviao (char** M, int m, int n, int x, int y, char alvo){
-        if (y < (m - 1) && M[x][y + 1] == alvo){}
-        else if (x < (n - 1) && M[x + 1][y] == alvo){}
 
-        else if (y > 0 && M[x][y - 1] == alvo){}
-
-        else if (x > 0 && M[x - 1][y] == alvo){}
+void afunda_hidro_aviao (char filename[], char** M, int m, int n, int x, int y, char alvo){
+        if (y < (m - 1) && M[x][y + 1] == alvo){
+        }
+        else if (x < (n - 1) && M[x + 1][y] == alvo){
+        }
+        else if (y > 0 && M[x][y - 1] == alvo){
+        }
+        else if (x > 0 && M[x - 1][y] == alvo){
+        }
 }
+
 void afunda_embarcacao (char filename[], char** M, int m, int n, int x, int y, char alvo){
-    if (alvo == 'H')
-        afunda_hidro_aviao (M, m, n, x, y, alvo);
-    else{
-        if (y < (n - 1) && M[x][y + 1] == alvo){}
+    switch (alvo){
+        case 'S' :
+            destroi_submarino(filename,M,m,n,x,y,alvo);
+            break;
 
-        else if (x < (m - 1) && y < (n - 1) && M[x + 1][y + 1] == alvo){}
+        case 'D' :
+            afunda_destroyer(filename, M, m, n, x, y, alvo);
+                break;
 
-        else if (x < (m - 1) && M[x + 1][y] == alvo){}
-
-        else if (x < (m - 1) && y > 0 && M[x + 1][y - 1] == alvo){}
-
-        else if (y > 0 && M[x][y - 1] == alvo){}
-
-        else if (x > 0 && M[x - 1][y] == alvo){}
-
-        else if (x > 0 && y < (n - 1) && M[x - 1][y + 1] == alvo){}
-
+        case 'C' :
+            afunda_cruzador (filename ,M ,m ,n ,x ,y ,alvo);
+            break;
+        case 'P' :
+            afunda_porta_aviao (filename,M ,m ,n ,x ,y ,alvo);
+            break;
+        
+        case 'H' :
+            afunda_hidro_aviao (filename ,M ,m ,n ,x ,y ,alvo);
+            break;
+        case 'B' :
+            afunda_barco(filename,M,m,n,x,y,alvo);
+            break;
     }
 }
 int dispara_tiros(char filename[],char** M, int m, int n){
@@ -247,7 +260,7 @@ int dispara_tiros(char filename[],char** M, int m, int n){
         coordenadas_tiro(&x, &y, m, n);
         alvo = identifica_alvo_atingido (M, x, y);
         atualiza_mapa(filename, M, m, n);
-        afunda_embarcacao (filename, M, m, n, x, y, alvo);
+        afunda_embarcacao (filename,M, m, n, x, y, alvo);
         atualiza_mapa(filename, M, m, n);
         if (alvo == 'B'){
             printf("O barco afundou\n\n");

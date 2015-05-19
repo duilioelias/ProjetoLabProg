@@ -52,11 +52,12 @@ void coordenadas_tiro (int* x, int* y, int m, int n);
 
 char identifica_alvo_atingido (char** M, int x, int y);
 
+void afunda_barco(char filename[], char** M, int m, int n, int x, int y, char alvo);
 void afunda_destroyer (char filename[], char** M, int m, int n, int x, int y, char alvo);
 void afunda_cruzador (char filename[], char** M, int m, int n, int x, int y, char alvo);
 void afunda_porta_aviao (char filename[], char** M, int m, int n, int x, int y, char alvo);
-void afunda_hidro_aviao (char** M, int m, int n, int x, int y, char alvo);
-void afunda_embarcacao (char** M, int m, int n, int x, int y, char alvo);
+void afunda_hidro_aviao (char filename[],char** M, int m, int n, int x, int y, char alvo);
+void afunda_embarcacao (char filename[], char** M, int m, int n, int x, int y, char alvo);
 int dispara_tiros(char filename[],char** M, int m, int n);
 
 void posiciona_barco (char filename[], char** M, int* xBarco, int* yBarco, int m, int n);
