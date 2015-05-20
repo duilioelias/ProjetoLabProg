@@ -27,7 +27,7 @@ void save_file (char* filename){
     int i = 0, j = 0;
     char ext[] = ".txt";
 
-    printf("Digite seu nickname: ");
+    printf("Digite o nome do arquivo de saída: ");
     scanf("%s", filename);
 
     while (filename[i] != '\0') /*localiza o fim do nome*/
@@ -40,7 +40,7 @@ void save_file (char* filename){
     }while (ext[j - 1] != '\0');
 
     arq = fopen (filename , "w"); /*zerar arquivo*/
-    fprintf (arq, "");
+    /*fprintf (arq, "");*/
     fclose(arq);
 
 }
@@ -153,14 +153,18 @@ void escreva_mapa_tela(char** M, int m, int n){
 
 }
 
+/*Atualiza Matriz que representa o mapa e o arquivo de saida*/
 void atualiza_mapa (char filename[], char** M, int m, int n){
     escreva_mapa_arquivo(filename, M, m, n);
     escreva_mapa_tela(M, m, n);
 }
 
+/*serteia tiro*/
 int sorteia (int k){
         return ((int)(1.0 + (rand() / (RAND_MAX + 1.0)) * k));
 }
+
+/*gera as coordenadas do tiro*/
 void coordenadas_tiro (int* x, int* y, int m, int n){
     int num_rand;
 
@@ -169,6 +173,7 @@ void coordenadas_tiro (int* x, int* y, int m, int n){
     *y = num_rand % n + 1;
 }
 
+/*Identifica alvo atingido*/
 char identifica_alvo_atingido (char** M, int x, int y){
     char alvo;
     printf("Tiro atingiu a linha %d coluna %d ", x, y);
@@ -220,13 +225,15 @@ char identifica_alvo_atingido (char** M, int x, int y){
     }
     return alvo;
 }
-
+/*corre matriz e afundas as embarcacoes*/
 void afundador (char filename[], char** M, int m, int n, int x, int y, char alvo){
     int i, j;
     M[x-1][y-1]='*';
     for(i=-1;i<=1;i++){
         for(j=-1;j<=1;j++){
+            /*Limites da matriz*/
             if(x + i > 0 && x + i <= m && y + j > 0 && y + j <= n){
+                /*base da recursao(eh alvo)*/
                 if(M[(x-1)+i][(y-1)+j] == alvo){
                     afundador (filename,M,m,n,x+i,y+j,alvo);
                 }
@@ -237,27 +244,25 @@ void afundador (char filename[], char** M, int m, int n, int x, int y, char alvo
     }
 }
 
-
+/*Afunda o destroyer*/
 void afunda_destroyer (char filename[], char** M, int m, int n, int x, int y, char alvo){
-    printf("###atigiu um destryer###\n");
     afundador (filename,M, m, n, x, y, alvo);
 }
 
-
+/*Afunda o cruzador*/
 void afunda_cruzador (char filename[], char** M, int m, int n, int x, int y, char alvo){
     afundador (filename,M, m, n, x, y, alvo);
-    printf("###atigiu um cruzador###\n");
 }
+/*Afunda o porta-aviao*/
 void afunda_porta_aviao (char filename[], char** M, int m, int n, int x, int y, char alvo){
-    printf("###atigiu um portaAviao###\n");
     afundador (filename,M, m, n, x, y, alvo);
 }
 
+/*afunda o hidro-aviao*/
 void afunda_hidro_aviao (char filename[], char** M, int m, int n, int x, int y, char alvo){
-        printf("###HidroAviao###\n");
-        afundador (filename,M, m, n, x, y, alvo);
+    afundador (filename,M, m, n, x, y, alvo);
 }
-
+/*swtch para verifcar o tipo de embarcacao*/
 void afunda_embarcacao (char filename[], char** M, int m, int n, int x, int y, char alvo){
     switch (alvo){
         case 'S' :
@@ -279,6 +284,7 @@ void afunda_embarcacao (char filename[], char** M, int m, int n, int x, int y, c
             break;
     }
 }
+/*diparador de tiros*/
 int dispara_tiros(char filename[],char** M, int m, int n){
     int x, y, cont, time;
     char alvo;
@@ -299,7 +305,7 @@ int dispara_tiros(char filename[],char** M, int m, int n){
     }
     return 1;
 }
-
+/*posiciona o barco a cada jogada*/
 void posiciona_barco (char filename[], char** M, int* xBarco, int* yBarco, int m, int n){
     int y;
     char digito;
@@ -333,6 +339,7 @@ void posiciona_barco (char filename[], char** M, int* xBarco, int* yBarco, int m
     atualiza_mapa(filename, M, m, n);
 }
 
+/*verifica se o movimento de entrada é valido*/
 char mov_valido (){
     char mov;
     while(1){
@@ -344,6 +351,7 @@ char mov_valido (){
         printf("\nDigite um movimento valido (b), (c), (d) ou (e): ");
     }
 }
+/*movimenta o barco*/
 int rema_barco (char filename[], char** M, int* xBarco, int* yBarco, int m, int n){
     char mov;
     int tentativa = 3, xNew, yNew ; /*para testar nova posicao*/

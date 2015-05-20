@@ -32,7 +32,7 @@ int main(){
     escreva_mapa_tela(mapa, m, n);
     posiciona_barco(save, mapa, &xBarco, &yBarco, m, n);
 
-
+    /*define o fim do jogo*/
     while (1){
             if (!dispara_tiros(save, mapa, m, n)){
                 printf("Fim do jogo\n");
@@ -43,6 +43,7 @@ int main(){
                 break;
             }
     }
+    /*libera matriz alocada*/
     LiberaMatriz(mapa, m);
 return 0;
 }
