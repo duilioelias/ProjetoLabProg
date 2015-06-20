@@ -1,0 +1,37 @@
+dnl -*- mode:m4 -*-
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT(teste.c)
+
+dnl Checks for programs.
+AC_PROG_CC
+
+dnl Checks for libraries.
+dnl We need X
+AC_PATH_X
+
+LDLIBS="-L${x_libraries} $LDLIBS"
+CFLAGS="-I${x_includes} $CFLAGS"
+
+dnl Replace `main' with a function in -lX11:
+AC_CHECK_LIB(X11, XFlush)
+dnl Replace `main' with a function in -lXpm:
+AC_CHECK_LIB(Xpm, XpmReadFileToPixmap,,
+echo Não será possível usar as funções da biblioteca Xpm
+XPMTEST="NOXPM=1"
+CFLAGS="-D NOXPM $CFLAGS"
+)
+
+AC_SUBST(XPMTEST)
+
+dnl Replace `main' with a function in -lm:
+AC_CHECK_LIB(m, tan)
+
+dnl Checks for header files.
+AC_HEADER_STDC
+AC_CHECK_HEADERS(unistd.h)
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+
+dnl Checks for library functions.
+
+AC_OUTPUT(Makefile)

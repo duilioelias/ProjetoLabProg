@@ -1,25 +1,10 @@
-/*******************************************************************************
-*	Membros do Grupo:
-*	 Nome: Duilio Henrique Haroldo Elias                                        *
-*	 Numero USP: 6799722                                                        *
-*	 
-*	 Nome: Maurício Ozaki                                                       *
-*	 Numero USP:7577427                                                        *
-*	 
-*	 Nome:Ricardo Oliveira                                                      *
-*	 Numero USP: 3683165                                                           *
-*	 
-*	Professor: Alair             					                           *
-*	Matéria: Laboratório de Programação I                                      *
-*
-*											    			                   *
-*******************************************************************************/
-
-
 #include <stdio.h>
+#include <GL/glut.h>
 #include <stdlib.h>
+#include <ctype.h>
+#include <math.h>
 #include <time.h>
-
+#include "xwc.h"
 
 
 void save_file (char* filename){
@@ -27,7 +12,7 @@ void save_file (char* filename){
     int i = 0, j = 0;
     char ext[] = ".txt";
 
-    printf("Digite o nome do arquivo de saída: ");
+    printf("Digite seu nickname: ");
     scanf("%s", filename);
 
     while (filename[i] != '\0') /*localiza o fim do nome*/
@@ -40,7 +25,7 @@ void save_file (char* filename){
     }while (ext[j - 1] != '\0');
 
     arq = fopen (filename , "w"); /*zerar arquivo*/
-    /*fprintf (arq, "");*/
+    /*fprintf (arq, ""); desnecessauro*/
     fclose(arq);
 
 }
@@ -107,7 +92,7 @@ char** leia_mapa(int *m, int *n){
             printf ("Arquivo %s nao encontrado\nDigite novamente o nome do arquivo: ", filename);
     }
     /*ler o cabecalho do arquivo*/
-    fscanf (arq, "%d %d", m, n); /*guardar m e n*/
+    fscanf (arq, "%d %d\n", m, n); /*guardar m e n*/
     M = AlocaMatriz (*m, *n);
     printf ("Arquivo %s sendo carregado...\n", filename);
     LeDados (arq, M, *m, *n); /*transferir para a matriz os dados do arquivo*/
@@ -149,22 +134,18 @@ void escreva_mapa_tela(char** M, int m, int n){
     printf ("___|");
     for (j = 1; j <= n; j ++) /*imprime borda*/
         printf("___");
-    printf("_|\n\n\n\n\n\n\n");
+    printf("_|\n\n\n\n\n\n\n\n\n\n\n\n");
 
 }
 
-/*Atualiza Matriz que representa o mapa e o arquivo de saida*/
 void atualiza_mapa (char filename[], char** M, int m, int n){
     escreva_mapa_arquivo(filename, M, m, n);
     escreva_mapa_tela(M, m, n);
 }
 
-/*serteia tiro*/
 int sorteia (int k){
         return ((int)(1.0 + (rand() / (RAND_MAX + 1.0)) * k));
 }
-
-/*gera as coordenadas do tiro*/
 void coordenadas_tiro (int* x, int* y, int m, int n){
     int num_rand;
 
@@ -173,18 +154,17 @@ void coordenadas_tiro (int* x, int* y, int m, int n){
     *y = num_rand % n + 1;
 }
 
-/*Identifica alvo atingido*/
 char identifica_alvo_atingido (char** M, int x, int y){
     char alvo;
-    printf("Tiro atingiu a linha %d coluna %d ", x, y);
+    printf("Tiro atingiu coordenadas (%d, %d) ", x, y);
     alvo = M[x - 1][y - 1];
-    
+
     switch (alvo){
         case 'S' :
             M[x - 1][y - 1] = 'x';
             printf("acertando um submarino\n\n");
             break;
-        
+
         case 'D' :
             M[x - 1][y - 1] = 'x';
             printf("acertando um destroyer\n\n");
@@ -194,22 +174,22 @@ char identifica_alvo_atingido (char** M, int x, int y){
             M[x - 1][y - 1] = 'x';
             printf("acertando um cruzador\n\n");
             break;
-        
+
         case 'P' :
             M[x - 1][y - 1] = 'x';
             printf("acertando um porta-aviao\n\n");
             break;
-        
+
         case 'H' :
             M[x - 1][y - 1] = 'x';
             printf("acertando um hidro-aviao\n\n");
             break;
-        
+
         case '.' :
             M[x - 1][y - 1] = '=';
             printf("acertando a agua\n\n");
             break;
-        
+
         case 'T' :
             M[x - 1][y - 1] = '+';
             printf("acertando um local onde o barco esteve\n\n");
@@ -219,72 +199,49 @@ char identifica_alvo_atingido (char** M, int x, int y){
             M[x - 1][y - 1] = '!';
             printf("acertando o barco\n");
             break;
-        
+
         default:
             printf("atingindo regiao ja atingida\n\n");
     }
     return alvo;
 }
-/*corre matriz e afundas as embarcacoes*/
-void afundador (char filename[], char** M, int m, int n, int x, int y, char alvo){
-    int i, j;
-    M[x-1][y-1]='*';
-    for(i=-1;i<=1;i++){
-        for(j=-1;j<=1;j++){
-            /*Limites da matriz*/
-            if(x + i > 0 && x + i <= m && y + j > 0 && y + j <= n){
-                /*base da recursao(eh alvo)*/
-                if(M[(x-1)+i][(y-1)+j] == alvo){
-                    afundador (filename,M,m,n,x+i,y+j,alvo);
-                }
-                
-            }
-            
-        }
-    }
-}
 
-/*Afunda o destroyer*/
+/*
 void afunda_destroyer (char filename[], char** M, int m, int n, int x, int y, char alvo){
-    afundador (filename,M, m, n, x, y, alvo);
 }
-
-/*Afunda o cruzador*/
 void afunda_cruzador (char filename[], char** M, int m, int n, int x, int y, char alvo){
-    afundador (filename,M, m, n, x, y, alvo);
 }
-/*Afunda o porta-aviao*/
 void afunda_porta_aviao (char filename[], char** M, int m, int n, int x, int y, char alvo){
-    afundador (filename,M, m, n, x, y, alvo);
 }
+*/
+void afunda_hidro_aviao (char** M, int m, int n, int x, int y, char alvo){
+        if (y < (m - 1) && M[x][y + 1] == alvo){}
+        else if (x < (n - 1) && M[x + 1][y] == alvo){}
 
-/*afunda o hidro-aviao*/
-void afunda_hidro_aviao (char filename[], char** M, int m, int n, int x, int y, char alvo){
-    afundador (filename,M, m, n, x, y, alvo);
+        else if (y > 0 && M[x][y - 1] == alvo){}
+
+        else if (x > 0 && M[x - 1][y] == alvo){}
 }
-/*swtch para verifcar o tipo de embarcacao*/
 void afunda_embarcacao (char filename[], char** M, int m, int n, int x, int y, char alvo){
-    switch (alvo){
-        case 'S' :
-            break;
+    if (alvo == 'H')
+        afunda_hidro_aviao (M, m, n, x, y, alvo);
+    else{
+        if (y < (n - 1) && M[x][y + 1] == alvo){}
 
-        case 'D' :
-            afunda_destroyer(filename, M, m, n, x, y, alvo);
-            break;
+        else if (x < (m - 1) && y < (n - 1) && M[x + 1][y + 1] == alvo){}
 
-        case 'C' :
-            afunda_cruzador (filename ,M ,m ,n ,x ,y ,alvo);
-            break;
-        case 'P' :
-            afunda_porta_aviao (filename,M ,m ,n ,x ,y ,alvo);
-            break;
-        
-        case 'H' :
-            afunda_hidro_aviao (filename ,M ,m ,n ,x ,y ,alvo);
-            break;
+        else if (x < (m - 1) && M[x + 1][y] == alvo){}
+
+        else if (x < (m - 1) && y > 0 && M[x + 1][y - 1] == alvo){}
+
+        else if (y > 0 && M[x][y - 1] == alvo){}
+
+        else if (x > 0 && M[x - 1][y] == alvo){}
+
+        else if (x > 0 && y < (n - 1) && M[x - 1][y + 1] == alvo){}
+
     }
 }
-/*diparador de tiros*/
 int dispara_tiros(char filename[],char** M, int m, int n){
     int x, y, cont, time;
     char alvo;
@@ -293,10 +250,8 @@ int dispara_tiros(char filename[],char** M, int m, int n){
         coordenadas_tiro(&x, &y, m, n);
         alvo = identifica_alvo_atingido (M, x, y);
         atualiza_mapa(filename, M, m, n);
-        afunda_embarcacao (filename,M, m, n, x, y, alvo);
-        if(alvo=='P'|| alvo == 'D'|| alvo == 'C' || alvo == 'P'|| alvo =='H'){
-            atualiza_mapa(filename, M, m, n);
-        }
+        afunda_embarcacao (filename, M, m, n, x, y, alvo);
+        atualiza_mapa(filename, M, m, n);
         if (alvo == 'B'){
             printf("O barco afundou\n\n");
             return 0;
@@ -305,41 +260,30 @@ int dispara_tiros(char filename[],char** M, int m, int n){
     }
     return 1;
 }
-/*posiciona o barco a cada jogada*/
+
 void posiciona_barco (char filename[], char** M, int* xBarco, int* yBarco, int m, int n){
     int y;
-    char digito;
-     fflush(stdin); /*para windows*/
-    /*_fpurge(stind) para linux*/
+    int digito=0;
 
     while (1){
-        y = 0;
-        digito = '0';
         printf("\nEscolha uma posicao incial (1 a %d) para o barco: ", n);
-        while (digito != '\n'){
-            if (digito < '0' || digito > '9'){
-                while (getc(stdin)!= '\n'){}
-                digito = '0';
-                printf("\nEste nao eh um valor valido para posicao. Digite novamente: ");
-            }
-            y = y * 10 + (digito - 48);
-            digito = getc (stdin);
+        scanf("%d", &digito);
+        while (!(digito>0 && digito<=n)){
+            printf("\nEste nao eh um valor valido para posicao. Digite novamente: ");
+            scanf("%d", &digito);
         }
-        if (y < 0 || y > n)
-            printf("%d nao eh uma posicao permitida\n\n", y);
-        else if (M[0][y - 1] != '.')
+        if (M[0][digito - 1] != '.')
             printf("Esta posicao esta ocupada. Escolha outra posicao\n\n");
         else {
-            M[0][y - 1] = 'B';
+            M[0][digito - 1] = 'B';
             *xBarco = 1;
-            *yBarco = y;
+            *yBarco = digito;
             break;
         }
     }
     atualiza_mapa(filename, M, m, n);
 }
 
-/*verifica se o movimento de entrada é valido*/
 char mov_valido (){
     char mov;
     while(1){
@@ -351,7 +295,6 @@ char mov_valido (){
         printf("\nDigite um movimento valido (b), (c), (d) ou (e): ");
     }
 }
-/*movimenta o barco*/
 int rema_barco (char filename[], char** M, int* xBarco, int* yBarco, int m, int n){
     char mov;
     int tentativa = 3, xNew, yNew ; /*para testar nova posicao*/
@@ -369,6 +312,7 @@ int rema_barco (char filename[], char** M, int* xBarco, int* yBarco, int m, int 
             yNew--;
         else if (mov == 'd')
             yNew++;
+
 
 
         if ((xNew == 0) || (yNew == 0) || (yNew == (n + 1))){

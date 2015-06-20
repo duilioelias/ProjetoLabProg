@@ -1,19 +1,19 @@
-#/******************************************************************************
+#/*******************************************************************************
 #*	Membros do Grupo:
-#*	 Nome: Duilio Henrique Haroldo Elias                                       *
-#*	 Numero USP: 6799722                                                       *
+#*	 Nome: Duilio Henrique Haroldo Elias                                        *
+#*	 Numero USP: 6799722                                                        *
 #*	 
-#*	 Nome: Maurício Ozaki                                                      *
-#*	 Numero USP: 7577427                                                       *
+#*	 Nome: Maurício Ozaki                                                       *
+#*	 Numero USP:                                                                *
 #*	 
-#*	 Nome:Ricardo de Oliveira                                                  *
-#*	 Numero USP:3683165                                                        *
+#*	 Nome:Ricardo Oliveira                                                      *
+#*	 Numero USP:                                                                *
 #*	 
 #*	Professor: Alair             					                           *
 #*	Matéria: Laboratório de Programação I                                      *
 #*
 #*											    			                   *
-#******************************************************************************/
+#*******************************************************************************/
 
 
 ############################# Makefile ##########################
@@ -38,4 +38,3 @@ clean:
 
 mrproper: clean
 	rm -rf funcoes
-
