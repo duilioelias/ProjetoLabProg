@@ -17,21 +17,25 @@
 
 
 ############################# Makefile ##########################
+CFLAGS=-Wall -g  -I -g -O2
 all: funcoes
 
-funcoes: funcoes.o main.o 
-	gcc -o funcoes funcoes.o main.o
+funcoes: funcoes.o main.o xwc.o
+	${CC} ${CFLAGS} -o funcoes funcoes.o main.o xwc.o -lm -lXpm -lX11 
 # O compilador faz a ligação entre os dois objetos
  
 #-----> Distancia com o botão TAB ### e não com espaços
 funcoes.o: funcoes.c
-	gcc -o funcoes.o -c funcoes.c -W -Wall -ansi -pedantic
+	${CC} ${CFLAGS} -o funcoes.o -c funcoes.c
 
 main.o: main.c funcoes.h
-	gcc -o main.o -c main.c -W -Wall -ansi -pedantic
+	${CC} ${CFLAGS} -o main.o -c main.c
+
+xwc.o : xwc.c
 
 clean:
 	rm -rf *.o
 
 mrproper: clean
 	rm -rf funcoes
+
