@@ -22,10 +22,20 @@
 
 
 int main(){
-  char** mapa;
+    WINDOW *screen;
+    int ii;
+
+    char** mapa;
     char save[20];
     int m, n, xBarco, yBarco;
     srand((unsigned int)time(NULL));
+
+    screen=InitGraph(600,600, "Bombardeio Naval");
+    for (ii = 0; ii < 400; ii++)
+        WPlot(screen,ii,200, 8);
+    WLine(screen,1,1,300,300,2);
+    NewPic(screen, 400, 400);
+    WPrint(screen, 10, 10, "Testando");
 
     save_file(save);
     mapa = leia_mapa(&m, &n);
