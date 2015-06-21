@@ -57,9 +57,7 @@ void afunda_cruzador (char filename[], char** M, int m, int n, int x, int y, cha
 void afunda_porta_aviao (char filename[], char** M, int m, int n, int x, int y, char alvo);
 void afunda_hidro_aviao (char** M, int m, int n, int x, int y, char alvo);
 void afunda_embarcacao (char filename[], char** M, int m, int n, int x, int y, char alvo);
-int dispara_tiros(char filename[],char** M, int m, int n);
 
-void posiciona_barco (char filename[], char** M, int* xBarco, int* yBarco, int m, int n);
 
 char mov_valido ();
 int rema_barco (char filename[], char** M, int* xBarco, int* yBarco, int m, int n);

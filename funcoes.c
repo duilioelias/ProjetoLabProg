@@ -242,47 +242,7 @@ void afunda_embarcacao (char filename[], char** M, int m, int n, int x, int y, c
 
     }
 }
-int dispara_tiros(char filename[],char** M, int m, int n){
-    int x, y, cont, time;
-    char alvo;
 
-    for (cont = 0; cont < 3; cont++){
-        coordenadas_tiro(&x, &y, m, n);
-        alvo = identifica_alvo_atingido (M, x, y);
-        atualiza_mapa(filename, M, m, n);
-        afunda_embarcacao (filename, M, m, n, x, y, alvo);
-        atualiza_mapa(filename, M, m, n);
-        if (alvo == 'B'){
-            printf("O barco afundou\n\n");
-            return 0;
-        }
-        for (time = 0; time < 200000000; time++){} /*intervalo de tempo entre os tiros*/
-    }
-    return 1;
-}
-
-void posiciona_barco (char filename[], char** M, int* xBarco, int* yBarco, int m, int n){
-    int y;
-    int digito=0;
-
-    while (1){
-        printf("\nEscolha uma posicao incial (1 a %d) para o barco: ", n);
-        scanf("%d", &digito);
-        while (!(digito>0 && digito<=n)){
-            printf("\nEste nao eh um valor valido para posicao. Digite novamente: ");
-            scanf("%d", &digito);
-        }
-        if (M[0][digito - 1] != '.')
-            printf("Esta posicao esta ocupada. Escolha outra posicao\n\n");
-        else {
-            M[0][digito - 1] = 'B';
-            *xBarco = 1;
-            *yBarco = digito;
-            break;
-        }
-    }
-    atualiza_mapa(filename, M, m, n);
-}
 
 char mov_valido (){
     char mov;
