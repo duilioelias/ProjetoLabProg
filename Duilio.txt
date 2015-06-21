@@ -1,4 +1,4 @@
-15 18 |
+ 15 18 |
 .D..B.....H...D...|
 .D..C..DD..H.D..P.|
 ...C......H....P..|
@@ -7,6 +7,64 @@
 ....DD..H...P...D.|
 S...............D.|
 ......C..S..S.....|
+...S...C..........|
+........C...CCCC..|
+..PPPPP..C.......C|
+...............H.C|
+...........DD.H..C|
+...S..D..H.....H.C|
+.....D..H.H.......|
+
+Escolha uma posicao incial (1 a 18) para o barco: Esta posicao esta ocupada. Escolha outra posicao
+
+
+Escolha uma posicao incial (1 a 18) para o barco: Tiro atingiu a linha 5 coluna 16 acertando a agua
+
+15 18 |
+.D..B.....H...D...|
+.D..C..DD..H.D..P.|
+...C......H....P..|
+..C..S........P...|
+.C.....H.H...P.=..|
+....DD..H...P...D.|
+S...............D.|
+......C..S..S.....|
+...S...C..........|
+........C...CCCC..|
+..PPPPP..C.......C|
+...............H.C|
+...........DD.H..C|
+...S..D..H.....H.C|
+.....D..H.H.......|
+Tiro atingiu a linha 8 coluna 2 acertando a agua
+
+15 18 |
+.D..B.....H...D...|
+.D..C..DD..H.D..P.|
+...C......H....P..|
+..C..S........P...|
+.C.....H.H...P.=..|
+....DD..H...P...D.|
+S...............D.|
+.=....C..S..S.....|
+...S...C..........|
+........C...CCCC..|
+..PPPPP..C.......C|
+...............H.C|
+...........DD.H..C|
+...S..D..H.....H.C|
+.....D..H.H.......|
+Tiro atingiu a linha 3 coluna 18 acertando a agua
+
+15 18 |
+.D..B.....H...D...|
+.D..C..DD..H.D..P.|
+...C......H....P.=|
+..C..S........P...|
+.C.....H.H...P.=..|
+....DD..H...P...D.|
+S...............D.|
+.=....C..S..S.....|
 ...S...C..........|
 ........C...CCCC..|
 ..PPPPP..C.......C|
